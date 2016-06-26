@@ -1,0 +1,85 @@
+;
+; badmemory.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=MTD
+ClassGuid={4d36e970-e325-11ce-bfc1-08002be10318}
+Provider=%ProviderString%
+DriverVer=06/26/2016,1.0.0.0
+CatalogFile=badmemory.cat
+
+
+[DestinationDirs]
+DefaultDestDir = 12
+BadMem.DriverFiles = 12 ;%windir%\system32\drivers
+
+;;
+;; Default install sections
+;;
+
+[DefaultInstall]
+OptionDesc          = %ServiceDescription%
+CopyFiles           = BadMem.DriverFiles
+
+[DefaultInstall.Services]
+AddService = %ServiceName%,,BadMem.Service
+
+
+;;
+;; Default uninstall sections
+;;
+
+[DefaultUninstall]
+DelFiles   = MiniFilter.DriverFiles
+
+[DefaultUninstall.Services]
+DelService = %ServiceName%,0x200 ;Ensure service is stopped before deleting
+
+
+;;
+;; Copy Files
+;;
+
+[BadMem.DriverFiles]
+%DriverName%.sys
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+badmemory.sys = 1,,
+
+;;
+;; Services Section
+;;
+
+[BadMem.Service]
+DisplayName      = %ServiceName%
+Description      = %ServiceDescription%
+ServiceBinary    = %12%\%DriverName%.sys        ;%windir%\system32\drivers\
+Dependencies     = ""
+ServiceType      = 1                            ;SERVICE_KERNEL_DRIVER
+StartType        = 0                            ;SERVICE_BOOT_START
+ErrorControl     = 1                            ;SERVICE_ERROR_NORMAL
+LoadOrderGroup   = "System Reserved"
+AddReg           = BadMem.AddRegistry
+
+;;
+;; Registry Modifications
+;;
+
+[BadMem.AddRegistry]
+
+
+;;
+;; String Section
+;;
+
+[Strings]
+ProviderString          = "Syahmi"
+ServiceDescription      = "Make portion of memory unusable"
+ServiceName             = "BadMemory"
+DiskName                = "badmemory Source Disk"
+DriverName              = "badmemory"

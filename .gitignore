@@ -1,0 +1,15 @@
+Debug
+Release
+ipch
+.vs
+*.suo
+*.opensdf
+*.sdf
+*.user
+*.aps
+*.psess
+*.vspx
+*.vsp
+*.VC.db
+*.opendb
+*.pdb
