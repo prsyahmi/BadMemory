@@ -13,3 +13,7 @@ ipch
 *.VC.db
 *.opendb
 *.pdb
+sdv*
+runsdv*
+*.err
+*.log

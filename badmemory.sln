@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "badmemory", "badmemory\badmemory.vcxproj", "{950FB034-2F3F-4A1A-94E4-621DCED69384}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BadMemoryManager", "BadMemoryManager\BadMemoryManager.vcxproj", "{31237A35-6248-4D5D-B5EA-E9205AB90DF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -41,6 +43,18 @@ Global
 		{950FB034-2F3F-4A1A-94E4-621DCED69384}.Release|x86.ActiveCfg = Release|Win32
 		{950FB034-2F3F-4A1A-94E4-621DCED69384}.Release|x86.Build.0 = Release|Win32
 		{950FB034-2F3F-4A1A-94E4-621DCED69384}.Release|x86.Deploy.0 = Release|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Debug|ARM.ActiveCfg = Debug|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Debug|x64.ActiveCfg = Debug|x64
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Debug|x64.Build.0 = Debug|x64
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Debug|x86.ActiveCfg = Debug|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Debug|x86.Build.0 = Debug|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Release|ARM.ActiveCfg = Release|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Release|ARM64.ActiveCfg = Release|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Release|x64.ActiveCfg = Release|x64
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Release|x64.Build.0 = Release|x64
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Release|x86.ActiveCfg = Release|Win32
+		{31237A35-6248-4D5D-B5EA-E9205AB90DF2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
