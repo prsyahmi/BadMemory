@@ -3,6 +3,7 @@
 
 #define NT_DEVICE_NAME     L"\\Device\\BadMemory"
 #define DOS_DEVICE_NAME    L"\\DosDevices\\BadMemory"
+#define BM_TAG             'MdaB'
 
 DRIVER_INITIALIZE DriverEntry;
 DRIVER_UNLOAD BadMemUnloadDriver;
@@ -36,7 +37,7 @@ DriverEntry(
 
 	RegParamPath.Length = 0;
 	RegParamPath.MaximumLength = RegistryPath->Length + 11 * sizeof(WCHAR);
-	RegParamPath.Buffer = ExAllocatePoolWithTag(NonPagedPool, RegParamPath.MaximumLength, 'MdaB');
+	RegParamPath.Buffer = ExAllocatePoolWithTag(NonPagedPool, RegParamPath.MaximumLength, BM_TAG);
 	if (RegParamPath.Buffer) {
 		RtlCopyUnicodeString(&RegParamPath, RegistryPath);
 		RtlAppendUnicodeToString(&RegParamPath, L"\\Parameters");
@@ -54,7 +55,7 @@ DriverEntry(
 			Status = ZwQueryValueKey(KeyHandle, &ValueName, KeyValuePartialInformation, ValueData, 0, &ValueLength);
 			if (Status == STATUS_BUFFER_OVERFLOW || Status == STATUS_BUFFER_TOO_SMALL)
 			{
-				ValueData = (UCHAR*)ExAllocatePoolWithTag(NonPagedPool, ValueLength, 'MdaB');
+				ValueData = (UCHAR*)ExAllocatePoolWithTag(NonPagedPool, ValueLength, BM_TAG);
 				if (ValueData)
 				{
 					Status = ZwQueryValueKey(KeyHandle, &ValueName, KeyValuePartialInformation, ValueData, ValueLength, &ValueLength);
@@ -70,10 +71,10 @@ DriverEntry(
 			ZwClose(KeyHandle);
 		}
 
-		ExFreePoolWithTag(RegParamPath.Buffer, 'MdaB');
+		ExFreePoolWithTag(RegParamPath.Buffer, BM_TAG);
 	}
 
-	GBadMemAddresses = (PVOID*)ExAllocatePoolWithTag(NonPagedPool, sizeof(PVOID) * GTotalRegions, 'MdaB');
+	GBadMemAddresses = (PVOID*)ExAllocatePoolWithTag(NonPagedPool, sizeof(PVOID) * GTotalRegions, BM_TAG);
 	if (GBadMemAddresses == NULL) {
 		DbgPrint("Unable to allocate bad memory holder");
 	} else {
@@ -107,7 +108,7 @@ DriverEntry(
 	}
 
 	if (ValueData) {
-		ExFreePoolWithTag(ValueData, 'MdaB');
+		ExFreePoolWithTag(ValueData, BM_TAG);
 		ValueData = NULL;
 		BadRegions = NULL;
 	}
@@ -201,7 +202,7 @@ Return Value:
 			if (GBadMemAddresses[i] != NULL) MmFreeContiguousMemory(GBadMemAddresses[i]);
 		}
 
-		ExFreePoolWithTag(GBadMemAddresses, 'MdaB');
+		ExFreePoolWithTag(GBadMemAddresses, BM_TAG);
 		GBadMemAddresses = NULL;
 	}
 }
