@@ -71,7 +71,7 @@ AddReg           = BadMem.AddRegistry
 ;;
 
 [BadMem.AddRegistry]
-
+HKR,Parameters,,0x00000010
 
 ;;
 ;; String Section
