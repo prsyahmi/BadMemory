@@ -81,7 +81,7 @@ DriverEntry(
 		RtlZeroMemory(GBadMemAddresses, sizeof(PVOID) * GTotalRegions);
 	}
 
-	for (ULONG i = 0; i < GTotalRegions; i++)
+	for (ULONG i = 0; i < GTotalRegions && BadRegions; i++)
 	{
 		PHYSICAL_ADDRESS LowerBound;
 		PHYSICAL_ADDRESS UpperBound;
