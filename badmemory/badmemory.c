@@ -111,7 +111,7 @@ DriverEntry(
 		Boundary.QuadPart = 0;
 
 		PVOID BadAddr = MmAllocateContiguousMemorySpecifyCache(
-			UpperBound.QuadPart - LowerBound.QuadPart,
+			(SIZE_T)(UpperBound.QuadPart - LowerBound.QuadPart),
 			LowerBound,
 			UpperBound,
 			Boundary,
