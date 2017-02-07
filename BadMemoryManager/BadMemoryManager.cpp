@@ -383,6 +383,9 @@ void AddEntry()
 	if (region.LowerBound == 0 && region.UpperBound == 0) {
 		MessageBoxA(0, "Please specify correct address for both lower address and upper address", "Invalid input", MB_OK);
 		return;
+	} else if (region.LowerBound >= region.UpperBound) {
+		MessageBoxA(0, "Incorrect range", "Invalid input", MB_OK);
+		return;
 	}
 
 	SetWindowTextA(LowerBoundHwnd, "");
