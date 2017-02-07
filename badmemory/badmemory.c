@@ -49,27 +49,27 @@ DriverEntry(
 	PDEVICE_OBJECT  deviceObject = NULL;
 
 	UNICODE_STRING RegParamPath;
+	UNICODE_STRING RegParamString = RTL_CONSTANT_STRING(L"\\Parameters");
 	OBJECT_ATTRIBUTES KeyAttr;
-	HANDLE KeyHandle;
+	HANDLE KeyHandle = NULL;
 	UCHAR* ValueData = NULL;
 	PBAD_REGION BadRegions = NULL;
+	PBAD_REGION_STATUS BadRegionStatus = NULL;
 
 	RegParamPath.Length = 0;
-	RegParamPath.MaximumLength = RegistryPath->Length + 11 * sizeof(WCHAR);
+	RegParamPath.MaximumLength = RegistryPath->Length + RegParamString.Length;
 	RegParamPath.Buffer = ExAllocatePoolWithTag(NonPagedPool, RegParamPath.MaximumLength, BM_TAG);
 	if (RegParamPath.Buffer) {
 		RtlCopyUnicodeString(&RegParamPath, RegistryPath);
-		RtlAppendUnicodeToString(&RegParamPath, L"\\Parameters");
+		RtlAppendUnicodeStringToString(&RegParamPath, &RegParamString);
 
 		InitializeObjectAttributes(&KeyAttr, &RegParamPath, OBJ_CASE_INSENSITIVE, NULL, NULL);
 		Status = ZwOpenKey(&KeyHandle, KEY_READ, &KeyAttr);
 
 		if (NT_SUCCESS(Status))
 		{
-			UNICODE_STRING ValueName;
+			UNICODE_STRING ValueName = RTL_CONSTANT_STRING(L"BadRegions");
 			ULONG ValueLength = 0;
-
-			RtlInitUnicodeString(&ValueName, L"BadRegions");
 
 			Status = ZwQueryValueKey(KeyHandle, &ValueName, KeyValuePartialInformation, ValueData, 0, &ValueLength);
 			if (Status == STATUS_BUFFER_OVERFLOW || Status == STATUS_BUFFER_TOO_SMALL)
@@ -86,8 +86,6 @@ DriverEntry(
 					}
 				}
 			}
-
-			ZwClose(KeyHandle);
 		}
 
 		ExFreePoolWithTag(RegParamPath.Buffer, BM_TAG);
@@ -98,6 +96,13 @@ DriverEntry(
 		DbgPrint("Unable to allocate bad memory holder");
 	} else {
 		RtlZeroMemory(GBadMemAddresses, sizeof(PVOID) * GTotalRegions);
+	}
+
+	BadRegionStatus = (PBAD_REGION_STATUS)ExAllocatePoolWithTag(NonPagedPool, sizeof(BAD_REGION_STATUS) * GTotalRegions, BM_TAG);
+	if (BadRegionStatus == NULL) {
+		DbgPrint("Unable to allocate bad memory status");
+	} else {
+		RtlZeroMemory(BadRegionStatus, sizeof(PVOID) * GTotalRegions);
 	}
 
 	for (ULONG i = 0; i < GTotalRegions && BadRegions; i++)
@@ -117,6 +122,12 @@ DriverEntry(
 			Boundary,
 			MmNonCached);
 
+		if (BadRegionStatus) {
+			BadRegionStatus[i].LowerBound = BadRegions[i].LowerBound;
+			BadRegionStatus[i].UpperBound = BadRegions[i].UpperBound;
+			BadRegionStatus[i].Status = BadAddr != NULL;
+		}
+
 		if (BadAddr == NULL) {
 			DbgPrint("Unable to allocate bad memory at %I64d - %I64d", LowerBound.QuadPart, UpperBound.QuadPart);
 		}
@@ -130,6 +141,20 @@ DriverEntry(
 		ExFreePoolWithTag(ValueData, BM_TAG);
 		ValueData = NULL;
 		BadRegions = NULL;
+	}
+
+	if (KeyHandle) {
+		if (BadRegionStatus) {
+			UNICODE_STRING ValueName = RTL_CONSTANT_STRING(L"BadRegionStatus");
+
+			ZwSetValueKey(KeyHandle, &ValueName, 0, REG_BINARY, BadRegionStatus, sizeof(BAD_REGION_STATUS) * GTotalRegions);
+		}
+
+		ZwClose(KeyHandle);
+	}
+
+	if (BadRegionStatus) {
+		ExFreePoolWithTag(BadRegionStatus, BM_TAG);
 	}
 
 	RtlInitUnicodeString(&ntUnicodeString, NT_DEVICE_NAME);

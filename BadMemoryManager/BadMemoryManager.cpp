@@ -33,6 +33,7 @@ HWND UpperBoundHwnd;
 HWND AddBtnHwnd;
 HWND DelBtnHwnd;
 std::vector<BAD_REGION> BadRegions;
+std::vector<BAD_REGION_STATUS> BadRegionStatus;
 
 
 // Forward declarations of functions included in this code module:
@@ -282,6 +283,24 @@ void LoadEntries()
 		}
 	}
 
+	if (ERROR_SUCCESS != RegQueryValueEx(hKey, L"BadRegionStatus", NULL, NULL, NULL, &dwSize)) {
+		RegCloseKey(hKey);
+		return;
+	}
+
+	pBuffer = new unsigned char[dwSize];
+	BadRegionStatus.clear();
+
+	if (ERROR_SUCCESS == RegQueryValueEx(hKey, L"BadRegionStatus", NULL, NULL, pBuffer, &dwSize)) {
+		int nTotal = dwSize / sizeof(BAD_REGION);
+		PBAD_REGION_STATUS pBadRegionStatus = (PBAD_REGION_STATUS)pBuffer;
+
+		for (int i = 0; i < nTotal; i++)
+		{
+			BadRegionStatus.push_back(pBadRegionStatus[i]);
+		}
+	}
+
 	RegCloseKey(hKey);
 	delete[] pBuffer;
 }
@@ -318,8 +337,24 @@ void RefreshListbox()
 
 	for (auto it = BadRegions.begin(); it != BadRegions.end(); it++)
 	{
-		char szAddr[48];
-		sprintf_s(szAddr, "%llx - %llx", it->LowerBound, it->UpperBound);
+		char* status = "Restart";
+		char szAddr[64];
+
+		for (auto itStatus = BadRegionStatus.begin(); itStatus != BadRegionStatus.end(); itStatus++)
+		{
+			if (it->LowerBound == itStatus->LowerBound && it->UpperBound == itStatus->UpperBound)
+			{
+				if (itStatus->Status) {
+					status = "OK";
+				} else {
+					status = "FAIL";
+				}
+
+				break;
+			}
+		}
+
+		sprintf_s(szAddr, "%llx - %llx [%s]", it->LowerBound, it->UpperBound, status);
 		SendMessageA(ListBoxHwnd, LB_ADDSTRING, 0, (LPARAM)&szAddr);
 	}
 }
