@@ -20,6 +20,10 @@
 #include "stdafx.h"
 #include "BadMemoryManager.h"
 
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 #define MAX_LOADSTRING 100
 
 // Global Variables:
@@ -56,7 +60,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: Place code here.
+	// TODO: Place code here.
+	INITCOMMONCONTROLSEX c;
+	c.dwSize = sizeof(c);
+	c.dwICC = 0;
+	InitCommonControlsEx(&c);
 
     // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
