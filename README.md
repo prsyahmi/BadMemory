@@ -8,7 +8,10 @@ For example:
 
 However, there is limitation on the list which will causes bootmanager to fail with STATUS_BUFFER_TOO_SMALL and will not load the windows at all. Due to this and without succeed finding other solutions, this driver was created to overcome the issue.
 
-So far using this driver with defective RAM, I had never encountered any issues like BSODs, Application Crash, data corruption yet.
+My computer running with defective ram 24/7 mostly at the time for the past 8-months with this driver and not a single BSODs, Application Crash, data corruption occurred.
+
+## Download
+https://github.com/prsyahmi/BadMemory/releases
 
 ## Compiling
 To compile, make sure to have VS2015 with latest WDK installed. Then open the solution, configure the target platform and build the project.
