@@ -1,5 +1,5 @@
 # BadMemory
-Make portions of memory unusable for Windows.
+Make portions of memory unusable for Windows. Equivalent to badram on linux but for windows.
 
 It is possible to run windows with defective memory by telling windows not to use the faulty address by manually adding entry to badmemorylist on {badmemory} section of windows BCD.
 For example:
