@@ -13,7 +13,9 @@ This driver will start early at the boot time and will try to block the bad RAM 
 
 However my computer have been running with defective ram 24/7 mostly for a year now with this driver and not a single BSODs, Application Crash, data corruption occurred.
 
-Caution must be taken when doing major Windows update (eg. from Windows 10 Anniversary to Creators Update) since it will start another OS (WinPE) without the driver to do the update. In this case, it may end up creating a bad rollback files and when copying/installing new files to your drive it may ends up corrupted due to bad RAM. This will causes a boot-loop if you are unlucky, there is a way to exit the loop without reformat but I will not cover it here. Remember **ALWAYS PULL OUT BAD RAM WHEN DO MAJOR WINDOWS UPDATE**.
+Caution must be taken when doing major Windows update (eg. from Windows 10 Anniversary to Creators Update) since it will start another OS (WinPE) without the driver to do the update. In this case, it may end up creating a bad rollback files and when copying/installing new files to your drive it may ends up corrupted due to bad RAM. This will causes a boot-loop if you are unlucky, there is a way to exit the loop without reformat but I will not cover it here.
+
+**Remember ALWAYS PULL OUT BAD RAM BEFORE DOING MAJOR WINDOWS UPDATE**.
 
 ## Download
 https://github.com/prsyahmi/BadMemory/releases
