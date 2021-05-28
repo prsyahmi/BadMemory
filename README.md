@@ -37,5 +37,9 @@ Before using, move the faulty RAM to furthest bank (if you have more than 1 RAM 
 
 You may need to turn off RAM interleaving in the BIOS/UEFI if the bad region address resides on undesired location or if you want the bad region to be as little as possible.
 
+UPDATE:
+- This driver is not signed by microsoft, you may need to turn on test mode on later versions of windows
+- RAMMap can be used to verify the region: It will show as System PTE
+
 ## License
 This project is licensed under GPLv3. See LICENSE
